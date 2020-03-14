@@ -11,29 +11,35 @@ selecters = osSelector.detectOs()
 
 class ConfigWorker(object):
     
-    def __init__(self, fConfigs=''):
+    def __init__(self, fConfigs):
         self.fConfigs = fConfigs
 
     def selectConfig(self):
-        for config in len(self.fConfigs):
-            print(config)
+        print('select config or create another one\n'
+        + 'to create new config type create')
+        if (str(input()) == 'create'):
+            self.createConfig()
+        else: 
+            for i in range(0, len(self.fConfigs)):
+                print(self.fConfigs[i])
 
         print('To select config, type config name')
-        selConfig = str(input()) + '.ocon'
+        selConfig = str(input()+'.ocon') 
 
-        for i in self.fConfigs:
+        for i in range(len(self.fConfigs)):
             if(selConfig == self.fConfigs[i]):
-                return self.fConfigs[i] 
+                # return self.fConfigs[i] 
+                self.readConfig(self.fConfigs[i])
     
     def readConfig(self, config_name):
         if (selecters[2] == 'win32'):
-            configFile = open(selecters[1] + '\\' + config_name + ".ocon","r")
+            configFile = open(selecters[1] + '\\' + config_name, "r")
             coreK.windowsKeyReader()
         elif (selecters[2] == 'linux'):
-            configFile = open(selecters[1] + '/' + config_name + ".ocon","r")
+            configFile = open(selecters[1] + '/' + config_name, "r")
             coreK.linuxKeyReader()
         elif (selecters[2] == 'macOS'):
-            configFile = open(selecters[1] + '/' + config_name + ".ocon","r")
+            configFile = open(selecters[1] + '/' + config_name, "r")
             coreK.macOSKeyReader()
 
 
