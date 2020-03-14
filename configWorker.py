@@ -34,10 +34,18 @@ class ConfigWorker(object):
     def readConfig(self, config_name):
         if (selecters[2] == 'win32'):
             configFile = open(selecters[1] + '\\' + config_name, "r")
-            coreK.windowsKeyReader()
+            configList = configFile.readlines()
+            configFile.close()
+            configListClear = []
+            for i in range(len(configList)):
+                configListClear.append(configList[i].replace('\n', ''))
+            #print(configListClear)
+            coreK.windowsKeyReader(configListClear)
+
         elif (selecters[2] == 'linux'):
             configFile = open(selecters[1] + '/' + config_name, "r")
             coreK.linuxKeyReader()
+
         elif (selecters[2] == 'macOS'):
             configFile = open(selecters[1] + '/' + config_name, "r")
             coreK.macOSKeyReader()
