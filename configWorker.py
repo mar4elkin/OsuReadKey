@@ -1,11 +1,18 @@
+#stock libs
 import os
 from pathlib import Path
+#core
+from osPaths import OsPaths
+from core import Core
+
+coreK = Core()
+osSelector = OsPaths()
+selecters = osSelector.detectOs()
 
 class ConfigWorker(object):
     
-    def __init__(self, fConfigs='', toReadKeys=''):
+    def __init__(self, fConfigs=''):
         self.fConfigs = fConfigs
-        self.toReadKeys = toReadKeys
 
     def selectConfig(self):
         for config in len(self.fConfigs):
@@ -16,12 +23,22 @@ class ConfigWorker(object):
 
         for i in self.fConfigs:
             if(selConfig == self.fConfigs[i]):
-                return self.fConfigs[i]
-            
-        
+                return self.fConfigs[i] 
+    
+    def readConfig(self, config_name):
+        if (selecters[2] == 'win32'):
+            configFile = open(selecters[1] + '\\' + config_name + ".ocon","r")
+            coreK.windowsKeyReader()
+        elif (selecters[2] == 'linux'):
+            configFile = open(selecters[1] + '/' + config_name + ".ocon","r")
+            coreK.linuxKeyReader()
+        elif (selecters[2] == 'macOS'):
+            configFile = open(selecters[1] + '/' + config_name + ".ocon","r")
+            coreK.macOSKeyReader()
 
-    def writeToConfig(self, desktopPath, homePath, config_name):
-        configFile = open(homePath + '\\' + config_name + ".ocon","w+")
+
+    def writeToConfig(self, config_name):
+        configFile = open(selecters[1] + '\\' + config_name + ".ocon","w+")
 
         print('type keys and seperate it with comma')
         
@@ -33,10 +50,8 @@ class ConfigWorker(object):
 
     def createConfig(self):
         crConfigName = True
-        desktopPath = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
-        homePath = desktopPath + '\\' + 'osureadkey'
 
-        print('Config will be saved to ' + homePath)
+        print('Config will be saved to ' + selecters[1])
 
         while(crConfigName):
             
@@ -44,18 +59,43 @@ class ConfigWorker(object):
             configName = str(input())
 
             if (configName != ''):
-                if (Path(homePath).mkdir(parents=True, exist_ok=True)):
+                if (Path(selecters[1]).mkdir(parents=True, exist_ok=True)):
                     crConfigName = False    
-                    configFile = open(homePath + '\\' + configName + ".ocon","w+")
-                    self.writeToConfig(desktopPath, homePath, configName)
+                    if (selecters[2] == 'win32'):
+                        configFile = open(selecters[1] + '\\' + configName + ".ocon","w+")
+
+                    elif (selecters[2] == 'linux'):
+                        configFile = open(selecters[1] + '/' + configName + ".ocon","w+")
+
+                    elif (selecters[2] == 'macOS'):
+                        configFile = open(selecters[1] + '/' + configName + ".ocon","w+")
+
+                    self.writeToConfig(configName)
                 else:
                     try:
-                        f = open(homePath + '\\' + configName + ".ocon")
+                        if (selecters[2] == 'win32'):
+                            f = open(selecters[1] + '\\' + configName + ".ocon")
+
+                        elif (selecters[2] == 'linux'):
+                            f = open(selecters[1] + '/' + configName + ".ocon")
+
+                        elif (selecters[2] == 'macOS'):
+                            f = open(selecters[1] + '/' + configName + ".ocon")
+
                         f.close()
                         print('Config already created')
                     except FileNotFoundError:
                         crConfigName = False   
-                        configFile = open(homePath + '\\' + configName + ".ocon","w+")
-                        self.writeToConfig(desktopPath, homePath, configName)
+                        
+                        if (selecters[2] == 'win32'):
+                            configFile = open(selecters[1] + '\\' + configName + ".ocon","w+")
+
+                        elif (selecters[2] == 'linux'):
+                            configFile = open(selecters[1] + '/' + configName + ".ocon","w+")
+
+                        elif (selecters[2] == 'macOS'):
+                            configFile = open(selecters[1] + '/' + configName + ".ocon","w+")
+
+                        self.writeToConfig(configName)
             else: 
                 print("Config name can't be empty")

@@ -1,4 +1,8 @@
 import glob, os
+from osPaths import OsPaths
+
+osSelector = OsPaths()
+selecters = osSelector.detectOs()
 
 class ConfigFinder(object):
 
@@ -7,10 +11,8 @@ class ConfigFinder(object):
     
     def findConfig(self):
         self.configs = []
-        desktopPath = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
-        homePath = desktopPath + '\\' + 'osureadkey'
 
-        os.chdir(homePath)
+        os.chdir(selecters[1])
         for file in glob.glob("*.ocon"):
             self.configs.append(file)
 
