@@ -1,11 +1,24 @@
 import os
 from pathlib import Path
 
-class ConfigCreater(object):
+class ConfigWorker(object):
     
     def __init__(self, fConfigs='', toReadKeys=''):
         self.fConfigs = fConfigs
         self.toReadKeys = toReadKeys
+
+    def selectConfig(self):
+        for config in len(self.fConfigs):
+            print(config)
+
+        print('To select config, type config name')
+        selConfig = str(input()) + '.ocon'
+
+        for i in self.fConfigs:
+            if(selConfig == self.fConfigs[i]):
+                return self.fConfigs[i]
+            
+        
 
     def writeToConfig(self, desktopPath, homePath, config_name):
         configFile = open(homePath + '\\' + config_name + ".ocon","w+")
@@ -46,7 +59,3 @@ class ConfigCreater(object):
                         self.writeToConfig(desktopPath, homePath, configName)
             else: 
                 print("Config name can't be empty")
-
-
-c = ConfigCreater()
-c.createConfig()
