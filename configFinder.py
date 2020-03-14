@@ -1,4 +1,6 @@
 import glob, os
+import os.path
+from os import path
 from osPaths import OsPaths
 
 osSelector = OsPaths()
@@ -11,10 +13,10 @@ class ConfigFinder(object):
     
     def findConfig(self):
         self.configs = []
+        if (path.exists(selecters[1])):
+            os.chdir(selecters[1])
+            for file in glob.glob("*.ocon"):
+                self.configs.append(file)
+            return self.configs
 
-        os.chdir(selecters[1])
-        for file in glob.glob("*.ocon"):
-            self.configs.append(file)
-
-        return self.configs
 
